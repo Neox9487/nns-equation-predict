@@ -16,7 +16,7 @@ y = 5*x + 1 + np.random.randn(200, 1) * 0.3
 # y5 = x**5 - 3*x**4 - 5*x**3 + 2*x**2 - x + 1 + np.random.randn(200, 1) * 0.3
 
 # structure
-layer_sizes = [1, 32, 1]
+layer_sizes = [1, 64, 64, 1]
 lr = 0.01
 
 # initialize
@@ -28,10 +28,9 @@ for i in range(len(layer_sizes) - 1):
     weights.append(w)
     biases.append(b)
 
-# 激活函數
-# 這裡我用 tanh
-def tanh(x): return np.tanh(x)
-def tanh_derivative(x): return 1 - np.tanh(x)**2
+# 激活函數 ReLU
+def relu(x): return np.maximum(0, x)
+def relu_derivative(x): return (x > 0).astype(float)
 
 loss = 1
 epoch = 0
@@ -44,7 +43,7 @@ while loss>0.1:
     for w, b in zip(weights[:-1], biases[:-1]):
         z = a.dot(w) + b
         zs.append(z)
-        a = tanh(z)
+        a = relu(z)
         activations.append(a)
     
     z = activations[-1].dot(weights[-1]) + biases[-1]
@@ -58,7 +57,7 @@ while loss>0.1:
     deltas = [dy]
     
     for i in reversed(range(len(layer_sizes) - 2)):
-        dz = deltas[-1].dot(weights[i+1].T) * tanh_derivative(zs[i])
+        dz = deltas[-1].dot(weights[i+1].T) * relu_derivative(zs[i])
         deltas.append(dz)
     deltas.reverse()
     
@@ -80,7 +79,7 @@ plt.scatter(x, y, s=10, label="True data", alpha=0.6)
 # 預測
 a = x
 for w, b in zip(weights[:-1], biases[:-1]):
-    a = tanh(a.dot(w) + b)
+    a = relu(a.dot(w) + b)
 y_pred = a.dot(weights[-1]) + biases[-1]
 
 plt.plot(x, y_pred, color="red", linewidth=2, label="NN prediction")

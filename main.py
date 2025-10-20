@@ -24,7 +24,7 @@ weights = []
 biases = []
 for i in range(len(layer_sizes) - 1):
     w = np.random.randn(layer_sizes[i], layer_sizes[i+1]) * 0.1
-    b = np.zeros((1, layer_sizes[i+1]))
+    b = np.random.randn(1, layer_sizes[i+1]) * 0.01
     weights.append(w)
     biases.append(b)
 

@@ -4,7 +4,6 @@
 x_raw = np.linspace(-50, 50, 200).reshape(-1, 1)
 x = (x_raw - np.mean(x_raw)) / np.std(x_raw)
 y = 5*x + 1 + np.random.randn(200, 1) * 0.3
-
 ```
 - `x_raw`：原始輸入，範圍從 -50 到 50，總共 200 個點
 - `x`：標準化後的輸入，使平均值為 0、標準差為 1這樣神經網路訓練更穩定，不會出現梯度爆炸或消失
